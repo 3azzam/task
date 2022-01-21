@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const _ = require("lodash");
 const ProductService = require("../services/productServrice");
 const ExternalProductsService = require("../services/externalService");
 
@@ -18,19 +18,21 @@ const search = async (req, res, next) => {
       uri: `${externalProductUri}?q=${filters.q}&page=${filters.page}`,
     });
 
-    const { data } = externalProductsData.data;
+    const { data, meta } = externalProductsData.data;
     const productsData = await productService.search(
       {
         productIds: data.map((p) => p.id),
       },
-      filters.fields.filter(field => field !== 'seller_count') 
+      filters.fields.filter((field) => field !== "seller_count")
     );
 
     const excludedFields = ["price", "seller_count"].filter(
       (key) => !filters.fields.includes(key)
     );
-
-    return res.send(searchMapper(data, productsData, excludedFields));
+    return res.send({
+      data: searchMapper(data, productsData, excludedFields),
+      meta,
+    });
   } catch (e) {
     next(e);
   }

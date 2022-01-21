@@ -1,6 +1,5 @@
 <template>
   <div>
-    <SearchHeader />
     <div class="border border-info rounded-2 overlay">
       <p v-if="title" class="bg-info text-white d-flex p-2 fw-bold">
         {{ title }}
@@ -9,14 +8,20 @@
         <TableHeader v-bind:columns="columns" />
         <TableBody v-bind:data="data" v-bind:columns="columns" />
       </table>
+      <div class="d-flex justify-content-end mb-2">
+        <TablePagination
+          v-bind:activePage="pagination.activePage"
+          v-bind:totalPages="pagination.totalPages"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import SearchHeader from "./SearchHeader.vue";
 import TableBody from "./TableBody.vue";
 import TableHeader from "./TableHeader.vue";
+import TablePagination from "./TablePagination.vue";
 
 export default {
   props: {
@@ -30,11 +35,16 @@ export default {
         );
       },
     },
+    pagination: {
+      validator: function (object) {
+        return object.totalPages && object.activePage;
+      },
+    },
   },
   components: {
-    SearchHeader,
     TableBody,
     TableHeader,
+    TablePagination,
   },
   name: "GenericTable",
 };

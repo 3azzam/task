@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const routes = require("./routes");
+const cors = require('cors');
 
 const db = require("./config/dbConfig");
 
@@ -19,6 +20,7 @@ db.authenticate()
     console.log("******************************************************");
   });
 
+app.use(cors());
 app.use(routes);
 
 module.exports = app;
